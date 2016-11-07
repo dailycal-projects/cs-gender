@@ -1,0 +1,161 @@
+---
+layout: default
+---
+
+<div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Headline</h1>
+        <p>By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a>
+        <br>
+        November 11, 2016</p>
+
+        <p>When you look around a class, how likely are you to find someone like you? We've created a seating chart for one of the largest lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science major</a>, or an <a href="#english">English major</a>.</p>
+
+        <p><b>Related story:</b> <a href="{{ site.baseurl }}">What does a hacker look like?</a></p>
+
+        <hr>
+      </div>
+    </div>
+    <div class="row graphic-container">
+      <div class="col-md-12">
+
+          <span id="pct-female-label" class="label"></span>
+          of the
+          <span id="total-count-label" class="label"></span>
+
+          <select id="department-selector" data-width="300px" data-live-search="true" data-style="btn-secondary" class="selector selectpicker"></select>
+
+          &nbsp; graduates in &nbsp;
+
+          <select id="year-selector" data-width="100px" data-style="btn-secondary" class="selector selectpicker">
+          </select>
+
+          &nbsp; were <span class="female">female.</span>
+
+      </div>
+      <div class="col-md-8 offset-md-2" id="lecture-graphic">
+        {% include wheeler.svg %}
+      </div>
+  </div>
+
+<script type="text/javascript">
+/*
+ * Convert arbitrary strings to valid css classes.
+ * via: https://gist.github.com/mathewbyrne/1280286
+ */
+var classify = function(str) {
+    return str.toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
+// D3 formatters
+var fmtPct = d3.format('%');
+
+// Global vars
+var dataSeries = [];
+var FEMALE_COLOR = '#8dd3c7';
+
+// Get the data, format it and render the chart
+d3.csv('{{ site.baseurl }}/csv/data.csv', function(data) {
+  departments = {};
+  slugs = {}
+
+  data.forEach(function(d) {
+    slug = classify(d['dept']);
+    // Populate a crosswalk for slugs
+    slugs[slug] = d['dept'];
+
+    year = (parseInt(d['year'].split('-')[0]) + 1).toString();
+    departments[slug] = departments[slug] || {};
+    departments[slug][year] = {
+      'femalePct': d['female_pct'],
+      'totalCount': +d['total_count']
+    }
+  });
+
+  // Populate department selector
+  html = '';
+  _.each(slugs, function(val, key) {
+    html += '<option value="'+ key + '">' + val + '</option>';
+  });
+  $('#department-selector').html(html);
+
+  // Populate year selector
+  html = '';
+  for (i = 2016; i >= 1985; i--) {
+    html += '<option>' + i.toString() + '</option>';
+  }
+  $('#year-selector').html(html);
+
+  // Render the chart
+  if (location.hash) {
+    render();
+  } else {
+    refresh();
+  }
+});
+
+// Set up the event listeners
+$('.selector').change(function(e) {
+  refresh();
+});
+$(window).on('hashchange', function() {
+  $('#department-selector').selectpicker('val', location.hash.slice(1));
+  render();
+});
+
+var refresh = function() {
+  var deptName = $('#department-selector').val();
+  location.hash = classify(deptName);
+  render();
+}
+
+var render = function() {
+  // Get the department name from the hash
+  var slug = location.hash.slice(1);
+  // Update the selector
+  $('#department-selector').val(slug);
+
+  // Get the year from the selector
+  var year = $('#year-selector').val();
+
+  var femalePct = departments[slug][year]['femalePct'];
+  var totalCount = departments[slug][year]['totalCount'];
+  
+  // Update the labels
+  $('#pct-female-label').html((femalePct * 100).toFixed(0) + '%');
+  $('#total-count-label').html(totalCount);
+
+  renderLectureGraphic({
+      femalePct: femalePct
+  });
+}
+
+var renderLectureGraphic = function(config) {
+  // Number of seats
+  var numSeats = d3.select('#seats').selectAll('polygon')[0].length;
+  var seats = _.range(numSeats);
+
+  // Number to color
+  var numSelectedSeats = Math.floor(config['femalePct'] * numSeats)
+  var selectedSeats = _.sample(seats, numSelectedSeats)
+
+  d3.select('#seats')
+    .selectAll('polygon')
+    .transition()
+    .duration(750)
+    .style('fill', function(d, i) { 
+      if (selectedSeats.indexOf(i) > 0) {
+        return FEMALE_COLOR;
+      } else {
+        return '#fff';
+      }
+    });
+}
+</script>

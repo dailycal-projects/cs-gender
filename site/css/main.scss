@@ -1,0 +1,130 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+  "bootstrap",
+  "dc",
+  "graphic",
+  "bootstrap-select"
+;
+
+.graphic-container {
+
+  text-align: center;
+  font-size: 20px;
+
+  #pct-female-label {
+    position: relative;
+    top: 10px;
+    display: inline-block;
+    width: 120px;
+    font-weight: 600;
+    font-size: 48px;
+  }
+
+  #total-count-label {
+    display: inline-block;
+    width: 50px;
+    text-align: left;
+  }
+
+  span.female {
+    background: #8dd3c7;
+    padding: 8px 12px;
+    border-radius: 4px;
+  }
+
+  #lecture-graphic {
+    margin-top: 15px;
+  }
+
+  #seats polygon {
+    fill: #fff;
+  }
+
+}
+
+.top {
+    background: #000;
+    color: #fff;
+    font-family: 'Cutive Mono', sans-serif;
+    height: 100vh;
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 4.5rem;
+      font-weight: 600;
+      color: #ff0076;
+    }
+
+    p {
+      color: #fff;
+    }
+
+    p.teaser {
+      color: #e6db74;
+    }
+
+    .tag {
+      color: #ff0076;
+      padding: 0;
+    }
+
+    .tag-class {
+      color: #81d72e;
+    }
+
+    .tag-value {
+      color: #e6db74;
+    }
+
+    // Capitalize main headline, byline, date
+    .container p {
+      font-family: 'Cutive Mono', sans-serif;
+      font-size: $font-size-lg;
+    }
+
+  }
+
+.container {
+  .article p {
+    font-family: $font-family-serif;
+  }
+
+  section p, section dl, .blockquote {
+    text-align: left;
+  }
+
+  section {
+    margin: 2em auto;
+  }
+
+  .year {
+    font-family: sans-serif;
+    margin-right: 0.5em;
+    color: $gray-light;
+  }
+
+  .table .right {
+    text-align: right;
+  }
+
+  // Graphics, sources
+  p.graphic-title {
+    font-family: sans-serif;
+    font-weight: bold;
+    max-width: 1000px;
+  }
+
+  p.graphic-source {
+    font-weight: 300;
+    max-width: 700px;
+    font-family: sans-serif;
+    font-size: $font-size-xs;
+    color: $gray-light;
+  }
+}

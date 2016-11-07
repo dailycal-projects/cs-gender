@@ -1,0 +1,41 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <meta name="description" content=""/>
+  <meta name="keywords" content="dailycal, Daily Californian, Daily Cal"/>
+  <link rel='shortcut icon' href='http://www.dailycal.org/assets/uploads/2012/02/favicon.png'/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:description" content="Breaking down the status of affirmative action at UC Berkeley."/>
+  <meta name="twitter:title" content="Affirmative action and UC Berkeley | The Daily Californian"/>
+  <meta name="twitter:site" content="@dailycal"/>
+  <meta name="twitter:domain" content="The Daily Californian"/>
+  <meta name="twitter:image" content="http://www.dailycal.org/assets/uploads/2016/06/affirmative-action-share.png"/>
+  <meta name="twitter:creator" content="@dailycal"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Affirmative action and UC Berkeley | The Daily Californian"/>
+  <meta property="og:url" content="http://projects.dailycal.org/affirmative-action/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Breaking down the status of affirmative action at UC Berkeley."/>
+  <meta property="og:image" content="http://www.dailycal.org/assets/uploads/2016/06/affirmative-action-share.png"/>
+  <meta property="og:site_name" content="The Daily Californian"/>
+  <meta property="article:publisher" content="https://www.facebook.com/dailycal"/>
+  <meta property="fb:admins" content="877855486"/>
+
+  <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
+  <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
+
+  <script src="{{ site.baseurl }}/js/jquery.min.js"></script>
+  <script src="{{ site.baseurl }}/js/bootstrap.min.js"></script>
+  <script src="{{ site.baseurl }}/js/d3.min.js"></script>
+  <script src="{{ site.baseurl }}/js/underscore.min.js"></script>
+  <script src="{{ site.baseurl }}/js/fa.js"></script>
+  <script src="{{ site.baseurl }}/js/bootstrap-select.min.js"></script>
+  <!--<script src="//www.dailycal.org/google-analytics-js/" type="text/javascript"></script>-->
+</head>

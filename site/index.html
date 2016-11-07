@@ -1,0 +1,536 @@
+---
+layout: default
+---
+
+<div class="top">
+  <div class="container">
+    <div style="padding-top: 40px" class="row">
+      <div class="col-md-6">
+
+        <h1>What does a hacker look like?</h1>
+
+        <br>
+
+        <p style="color: #81d72e;">By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a> and <a href="http://www.dailycal.org/author/cweiner">CHLOEE WEINER</a>
+        <br>
+        November 11, 2016</p>
+        
+      </div>
+
+      <div class="col-md-4 offset-md-1">
+        <p class="teaser">
+        <br>
+        UC Berkeley's EECS department has the lowest proportion of male graduates of any department on campus. It's put programs in place to close the gap — but is it enough?</p>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-8 article">
+
+      <p>“Um, this is 61C section.”</p>
+      <p>  Those were the words Alex Dotterweich heard when she walked into the first meeting of her computer science class. A male student stared at her, puzzled, assuming she had walked into the wrong room.</p>
+      <p>  Dotterweich, a third-year cognitive science major, can’t help but think her classmate’s comment had something to do with her appearance. She’s a classically trained ballerina with long blonde hair and a penchant for floral skirts – and she’s one of very few women in her section</p>
+      <p>  In the 2015-16 academic year, 89 percent of degrees awarded by the campus Electrical Engineering and Computer Science department went to male students. That's the highest proportion of male graduates of any department. In comparison, 68 percent of the math department graduates were male</p>
+      <p>  When she started at UC Berkeley, Dotterweich, whose high school didn’t offer computer science, thought she might major in English. But in her first semester on campus, she developed an interest in artificial intelligence.</p>
+      <p>  “I really liked CS,” Dotterweich said. “But as I went along there were not a lot of people like me in those classes.”</p>
+      <p>  After taking the introductory courses, however, she missed the GPA cutoff to declare the computer science major by one-tenth of a point. She plans to graduate with a CS minor instead</p>
+      <p>  To declare the computer science major, students must earn a 3.3 GPA in three introductory courses: 61A, 61B and 70. In the 2016 fall semester, the average GPA across those three classes was 3.14, according to campus data</p>
+      <p>  To be average in these courses is not quite good enough — the EECS major major in the College of Engineering and the computer science major in the College of Letters and Sciences are two of the most competitive majors on campus. They are also two of the majors with the fewest proportion of female graduates</p>
+      <p>  These facts have not gone unnoticed by the administration. The campus computer science department has dedicated resources and attention to improving the experience of female students graduating with computer science degrees. They are also engaged in efforts to broaden access to computer science for students across campus. Yet, some students find that the everyday experience of being a female undergraduate in Berkeley’s computer science program can be alienating.</p>
+
+      <p class="graphic-title">Percent male graduates in EECS and CS, 1984-2015</p>
+      <div id="line-chart"></div>
+      <p class="graphic-source">Source: Cal Answers</p>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+/*
+ * Basic Javascript helpers used in analytics.js and graphics code.
+ */
+
+var COLORS = {
+    'red1': '#ff0076', 'red2': '#A23520', 'red3': '#D8472B', 'red4': '#E27560', 'red5': '#ECA395', 'red6': '#F5D1CA',
+    'orange1': '#714616', 'orange2': '#AA6A21', 'orange3': '#E38D2C', 'orange4': '#EAAA61', 'orange5': '#F1C696', 'orange6': '#F8E2CA',
+    'yellow1': '#77631B', 'yellow2': '#B39429', 'yellow3': '#EFC637', 'yellow4': '#F3D469', 'yellow5': '#F7E39B', 'yellow6': '#FBF1CD',
+    'teal1': '#0B403F', 'teal2': '#11605E', 'teal3': '#17807E', 'teal4': '#51A09E', 'teal5': '#8BC0BF', 'teal6': '#C5DFDF',
+    'blue1': '#28556F', 'blue2': '#3D7FA6', 'blue3': '#51AADE', 'blue4': '#7DBFE6', 'blue5': '#A8D5EF', 'blue6': '#D3EAF7', 'pink1': '#ff0076'
+};
+
+/*
+ * Convert arbitrary strings to valid css classes.
+ * via: https://gist.github.com/mathewbyrne/1280286
+ *
+ * NOTE: This implementation must be consistent with the Python classify
+ * function defined in base_filters.py.
+ */
+var classify = function(str) {
+    return str.toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
+/*
+ * Convert key/value pairs to a style string.
+ */
+var formatStyle = function(props) {
+    var s = '';
+
+    for (var key in props) {
+        s += key + ': ' + props[key].toString() + '; ';
+    }
+
+    return s;
+}
+
+/*
+ * Create a SVG tansform for a given translation.
+ */
+var makeTranslate = function(x, y) {
+    var transform = d3.transform();
+
+    transform.translate[0] = x;
+    transform.translate[1] = y;
+
+    return transform.toString();
+}
+
+/*
+ * Parse a url parameter by name.
+ * via: http://stackoverflow.com/a/901144
+ */
+var getParameterByName = function(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+/*
+ * Convert a url to a location object.
+ */
+var urlToLocation = function(url) {
+    var a = document.createElement('a');
+    a.href = url;
+    return a;
+}
+
+/*
+ * format month abbrs in AP style
+ */
+var getAPMonth = function(dateObj) {
+    var apMonths = [ 'Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.' ];
+    var thisMonth = +fmtMonthNum(dateObj) - 1;
+    return apMonths[thisMonth];
+}
+
+/*
+ * Wrap a block of SVG text to a given width
+ * adapted from http://bl.ocks.org/mbostock/7555321
+ */
+var wrapText = function(texts, width, lineHeight) {
+    texts.each(function() {
+        var text = d3.select(this);
+        var words = text.text().split(/\s+/).reverse();
+
+        var word = null;
+        var line = [];
+        var lineNumber = 0;
+
+        var x = text.attr('x');
+        var y = text.attr('y');
+
+        var dx = text.attr('dx') ? parseFloat(text.attr('dx')) : 0;
+        var dy = text.attr('dy') ? parseFloat(text.attr('dy')) : 0;
+
+        var tspan = text.text(null)
+            .append('tspan')
+            .attr('x', x)
+            .attr('y', y)
+            .attr('dx', dx + 'px')
+            .attr('dy', dy + 'px');
+
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(' '));
+
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(' '));
+                line = [word];
+
+                lineNumber += 1;
+
+                tspan = text.append('tspan')
+                    .attr('x', x)
+                    .attr('y', y)
+                    .attr('dx', dx + 'px')
+                    .attr('dy', lineNumber * lineHeight)
+                    .attr('text-anchor', 'begin')
+                    .text(word);
+            }
+        }
+    });
+}
+
+// Global config
+var DEFAULT_WIDTH = 600;
+var MOBILE_THRESHOLD = 500;
+var containerElement = $('#line-chart');
+
+// D3 formatters
+var fmtComma = d3.format(',');
+var fmtPct = d3.format('%');
+var fmtYearAbbrev = d3.time.format('%y');
+var fmtYearFull = d3.time.format('%Y');
+var fmtMonthNum = d3.time.format('%m');
+
+// Get the data, format it and render the chart
+d3.csv('{{ site.baseurl }}/csv/cs_by_year.csv', function(d) {
+  formatData(d);
+  render(containerElement.width());
+});
+
+// Set up the resize event listener
+$( window ).resize(function() {
+  render(containerElement.width());
+});
+
+// Global vars
+var isMobile = false;
+var dataSeries = [];
+
+/*
+ * Format graphic data for processing by D3.
+ */
+var formatData = function(data) {
+    values = [];
+    data.forEach(function(d) {
+      year = d3.time.format('%Y').parse(d['year'].split('-')[0]);
+      if (d['gender'] == 'Male') {
+        values.push({
+          'date': year,
+          'amt': +d['headcount']
+        });
+      }
+    });
+
+    dataSeries.push({
+        'name': 'pct_male',
+        'values': values
+    });
+}
+
+/*
+ * Render the graphic(s). Called by pym with the container width.
+ */
+var render = function(containerWidth) {
+    if (!containerWidth) {
+        containerWidth = DEFAULT_WIDTH;
+    }
+
+    if (containerWidth <= MOBILE_THRESHOLD) {
+        isMobile = true;
+    } else {
+        isMobile = false;
+    }
+
+    // Render the chart!
+    renderLineChart({
+        container: '#line-chart',
+        width: containerWidth,
+        data: dataSeries
+    });
+}
+
+// Get the data, format it and render the chart
+d3.csv('{{ site.baseurl }}/csv/2015_16_by_gender.csv', function(data) {
+  
+  departments = {}
+  data.forEach(function(d) {
+    if (d['gender'] == 'Female') {
+      departments[d['dept']] = d['headcount'] * 100;
+    }
+  });
+
+  // Populate department selector
+  html = '';
+  _.each(departments, function(value, key) {
+    html += '<option>' + key + '</option>';
+  });
+  $('#department-selector').html(html);
+  
+
+  // Render the chart!
+  renderLectureGraphic({
+      container: '#lecture-graphic',
+      width: 1000,
+      numberFemale: departments['Economics']
+  });
+});
+
+$('#department-selector').change(function(e) {
+  var dept = $('#department-selector').val();
+
+  renderLectureGraphic({
+      container: '#lecture-graphic',
+      width: 1000,
+      numberFemale: departments[dept]
+  });
+
+
+})
+
+/*
+ * Render the lecture hall graphic.
+ */
+var renderLectureGraphic = function(config) {
+    /*
+     * Setup
+     */
+
+    var aspectWidth = isMobile ? 4 : 16;
+    var aspectHeight = isMobile ? 3 : 9;
+
+    var margins = {
+        top: 10,
+        right: 30,
+        bottom: 20,
+        left: 40
+    };
+
+    // Mobile
+    if (isMobile) {
+        ticksX = 5;
+        ticksY = 5;
+        margins['right'] = 25;
+    }
+
+    // Calculate actual chart dimensions
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
+
+    // Clear existing graphic (for redraw)
+    var containerElement = d3.select(config['container']);
+    containerElement.html('');
+
+    /*
+     * Create the root SVG element.
+     */
+    var chartWrapper = containerElement.append('div')
+        .attr('class', 'graphic-wrapper');
+
+    var chartElement = chartWrapper.append('svg')
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
+        .append('g')
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+    var seatSize = 40;
+    var horizontalSpace = 8;
+    var verticalSpace = 15;
+
+    chartElement.append('g')
+      .selectAll('rect')
+      .data(d3.range(100))
+      .enter().append('rect')
+      .attr('class', 'seat')
+      .attr('x', function(d) { return Math.floor(d/5) * (seatSize + horizontalSpace)   } )
+      .attr('y', function(d) { return (d % 5) * (seatSize + verticalSpace) } )
+      .attr('width', seatSize)
+      .attr('height', seatSize)
+      .attr('fill', function(d) {
+        if (d < config['numberFemale']) {
+          return 'pink';
+        } else {
+          return 'blue';
+        }
+      });
+}
+
+
+/*
+ * Render a line chart.
+ */
+var renderLineChart = function(config) {
+    /*
+     * Setup
+     */
+    var dateColumn = 'date';
+    var valueColumn = 'amt';
+
+    var aspectWidth = isMobile ? 4 : 16;
+    var aspectHeight = isMobile ? 3 : 9;
+
+    var margins = {
+        top: 10,
+        right: 30,
+        bottom: 20,
+        left: 40
+    };
+
+    var ticksX = 10;
+    var ticksY = 10;
+    var roundTicksFactor = 0.1;
+
+    // Mobile
+    if (isMobile) {
+        ticksX = 5;
+        ticksY = 5;
+        margins['right'] = 25;
+    }
+
+    // Calculate actual chart dimensions
+    var chartWidth = config['width'] - margins['left'] - margins['right'];
+    var chartHeight = Math.ceil((config['width'] * aspectHeight) / aspectWidth) - margins['top'] - margins['bottom'];
+
+    // Clear existing graphic (for redraw)
+    var containerElement = d3.select(config['container']);
+    containerElement.html('');
+
+    /*
+     * Create D3 scale objects.
+     */
+    var xScale = d3.time.scale()
+        .domain(d3.extent(config['data'][0]['values'], function(d) {
+            return d['date'];
+        }))
+        .range([ 0, chartWidth ])
+
+    var min = d3.min(config['data'], function(d) {
+        return d3.min(d['values'], function(v) {
+            return Math.floor(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        })
+    });
+
+    if (min > 0) {
+        min = 0;
+    }
+
+    var max = d3.max(config['data'], function(d) {
+        return d3.max(d['values'], function(v) {
+            return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
+        })
+    });
+
+    var yScale = d3.scale.linear()
+        .domain([0.5,1])
+        .range([chartHeight, 0]);
+
+    var colorScale = d3.scale.ordinal()
+        .domain(_.pluck(config['data'], 'name'))
+        .range([COLORS['pink1'], COLORS['red3'], COLORS['yellow3'], COLORS['blue3'], COLORS['orange3'], COLORS['teal3']]);
+
+    /*
+     * Create the root SVG element.
+     */
+    var chartWrapper = containerElement.append('div')
+        .attr('class', 'graphic-wrapper');
+
+    var chartElement = chartWrapper.append('svg')
+        .attr('width', chartWidth + margins['left'] + margins['right'])
+        .attr('height', chartHeight + margins['top'] + margins['bottom'])
+        .append('g')
+        .attr('transform', 'translate(' + margins['left'] + ',' + margins['top'] + ')');
+
+    /*
+     * Create D3 axes.
+     */
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient('bottom')
+        .ticks(ticksX)
+        .tickFormat(function(d, i) {
+            if (isMobile) {
+                return '\u2019' + fmtYearAbbrev(d);
+            } else {
+                return fmtYearFull(d);
+            }
+        });
+
+    var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient('left')
+        .ticks(ticksY)
+        .tickFormat(fmtPct);
+
+    /*
+     * Render axes to chart.
+     */
+    chartElement.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', makeTranslate(0, chartHeight))
+        .call(xAxis);
+
+    chartElement.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis);
+
+    /*
+     * Render grid to chart.
+     */
+    var xAxisGrid = function() {
+        return xAxis;
+    }
+
+    var yAxisGrid = function() {
+        return yAxis;
+    }
+
+    chartElement.append('g')
+        .attr('class', 'x grid')
+        .attr('transform', makeTranslate(0, chartHeight))
+        .call(xAxisGrid()
+            .tickSize(-chartHeight, 0, 0)
+            .tickFormat('')
+        );
+
+    chartElement.append('g')
+        .attr('class', 'y grid')
+        .call(yAxisGrid()
+            .tickSize(-chartWidth, 0, 0)
+            .tickFormat('')
+        );
+
+    /*
+     * Render lines to chart.
+     */
+    var line = d3.svg.line()
+        .interpolate('monotone')
+        .x(function(d) {
+            return xScale(d[dateColumn]);
+        })
+        .y(function(d) {
+            return yScale(d[valueColumn]);
+        });
+
+    chartElement.append('g')
+        .attr('class', 'lines')
+        .selectAll('path')
+        .data(config['data'])
+        .enter()
+        .append('path')
+            .attr('class', function(d, i) {
+                return 'line ' + classify(d['name']);
+            })
+            .attr('stroke', function(d) {
+                return colorScale(d['name']);
+            })
+            .attr('d', function(d) {
+                return line(d['values']);
+            });
+
+}
+
+</script>
