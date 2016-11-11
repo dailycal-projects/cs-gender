@@ -1,44 +1,48 @@
 ---
 layout: default
+title: How many women are in your department?
 ---
-
-<div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Headline</h1>
-        <p>By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a>
-        <br>
-        November 11, 2016</p>
-
-        <p>When you look around a class, how likely are you to find someone like you? We've created a seating chart for one of the largest lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science major</a>, or an <a href="#english">English major</a>.</p>
-
-        <p><b>Related story:</b> <a href="{{ site.baseurl }}">What does a hacker look like?</a></p>
-
-        <hr>
-      </div>
+<div class="container">
+  <div class="row graphic-top">
+    <div class="col-md-8 offset-md-2">
+      <h1>How many women are in your department?</h1>
+      <p class="byline">By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a>
+      <br>
+      November 11, 2016</p>
+      <p>When you look around your class, how likely are you to find someone like you? We've created a seating chart for one of the large lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science</a> graduate, or an <a href="#english">English</a> graduate</a>.</p>
+      <p><b>Related story:</b> <a href="{{ site.baseurl }}/">What does a hacker look like?</a></p>
     </div>
-    <div class="row graphic-container">
-      <div class="col-md-12">
-
-          <span id="pct-female-label" class="label"></span>
-          of the
-          <span id="total-count-label" class="label"></span>
-
-          <select id="department-selector" data-width="300px" data-live-search="true" data-style="btn-secondary" class="selector selectpicker"></select>
-
-          &nbsp; graduates in &nbsp;
-
-          <select id="year-selector" data-width="100px" data-style="btn-secondary" class="selector selectpicker">
-          </select>
-
-          &nbsp; were <span class="female">female.</span>
-
-      </div>
-      <div class="col-md-8 offset-md-2" id="lecture-graphic">
-        {% include wheeler.svg %}
-      </div>
   </div>
+
+  <div class="row graphic-container">
+    <div class="col-md-12">
+
+        <span id="pct-female-label" class="label"></span>
+        of the
+        <span id="total-count-label" class="label"></span>
+
+        <select id="department-selector" data-size="20" data-width="300px" data-live-search="true" data-style="btn-secondary" class="selector selectpicker"></select>
+
+        &nbsp; graduates in &nbsp;
+
+        <select id="year-selector" data-width="100px" data-style="btn-secondary" class="selector selectpicker">
+        </select>
+
+        &nbsp; were <span class="female">female.</span>
+
+    </div>
+    <div class="col-md-8 offset-md-2" id="lecture-graphic">
+      {% include wheeler.svg %}
+    </div>
+  </div>
+
+  <div class="row footnotes">
+    <div class="col-md-8 offset-md-2">
+      <p>We've filled a random selection of the 768 seats on this chart based on the proportion of department graduates who identified as female, excluding departments with fewer than 30 graduates.</p>
+      <p>Data is from <a href="http://calanswers.berkeley.edu/">Cal Answers</a>. The analysis is available <a href="https://github.com/dailycal-projects/cs-gender">here</a>.</p>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
 /*
@@ -54,11 +58,7 @@ var classify = function(str) {
         .replace(/-+$/, '');            // Trim - from end of text
 }
 
-// D3 formatters
-var fmtPct = d3.format('%');
-
 // Global vars
-var dataSeries = [];
 var FEMALE_COLOR = '#8dd3c7';
 
 // Get the data, format it and render the chart
@@ -68,10 +68,13 @@ d3.csv('{{ site.baseurl }}/csv/data.csv', function(data) {
 
   data.forEach(function(d) {
     slug = classify(d['dept']);
-    // Populate a crosswalk for slugs
-    slugs[slug] = d['dept'];
-
     year = (parseInt(d['year'].split('-')[0]) + 1).toString();
+
+    // Populate a crosswalk for slugs
+    if (year == 2015) {
+      slugs[slug] = d['dept'];
+    }
+
     departments[slug] = departments[slug] || {};
     departments[slug][year] = {
       'femalePct': d['female_pct'],
