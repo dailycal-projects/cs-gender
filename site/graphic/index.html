@@ -2,21 +2,20 @@
 layout: default
 title: How many women are in your department?
 ---
-<div class="container">
+<div class="container graphic-container">
   <div class="row graphic-top">
     <div class="col-md-8 offset-md-2">
       <h1>How many women are in your department?</h1>
       <p class="byline">By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a>
       <br>
       November 11, 2016</p>
-      <p>When you look around your class, how likely are you to find someone like you? We've created a seating chart for one of the large lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science</a> graduate, or an <a href="#english">English</a> graduate</a>.</p>
+      <p>When you look around your class, how likely are you to find someone like you? We created a seating chart for one of the large lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science</a> graduate, or an <a href="#english">English</a> graduate</a>.</p>
       <p><b>Related story:</b> <a href="{{ site.baseurl }}/">What does a hacker look like?</a></p>
     </div>
   </div>
 
-  <div class="row graphic-container">
+  <div class="row graphic-text">
     <div class="col-md-12">
-
         <span id="pct-female-label" class="label"></span>
         of the
         <span id="total-count-label" class="label"></span>
@@ -29,8 +28,16 @@ title: How many women are in your department?
         </select>
 
         &nbsp; were <span class="female">female.</span>
-
     </div>
+  </div>
+  <div class="row graphic-text">
+    <div class="col-md-4 offset-md-4">
+      <div class="alert alert-danger hidden" role="alert">
+          Not enough data.
+      </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-8 offset-md-2" id="lecture-graphic">
       {% include wheeler.svg %}
     </div>
@@ -38,8 +45,8 @@ title: How many women are in your department?
 
   <div class="row footnotes">
     <div class="col-md-8 offset-md-2">
-      <p>We've filled a random selection of the 768 seats on this chart based on the proportion of department graduates who identified as female, excluding departments with fewer than 30 graduates.</p>
-      <p>Data is from <a href="http://calanswers.berkeley.edu/">Cal Answers</a>. The analysis is available <a href="https://github.com/dailycal-projects/cs-gender">here</a>.</p>
+      <p>We've filled a random selection of the 768 seats on this chart based on the proportion of department graduates who identified as female. We excluded departments with fewer than 30 graduates.</p>
+      <p>Data is from <a href="http://calanswers.berkeley.edu/">Cal Answers</a>. The analysis is available <a href="https://github.com/dailycal-projects/cs-gender/blob/master/cs_analysis.ipynb">here</a>.</p>
     </div>
   </div>
 </div>
@@ -128,16 +135,27 @@ var render = function() {
   // Get the year from the selector
   var year = $('#year-selector').val();
 
-  var femalePct = departments[slug][year]['femalePct'];
-  var totalCount = departments[slug][year]['totalCount'];
-  
-  // Update the labels
-  $('#pct-female-label').html((femalePct * 100).toFixed(0) + '%');
-  $('#total-count-label').html(totalCount);
+  try {
+    var femalePct = departments[slug][year]['femalePct'];
+    var totalCount = departments[slug][year]['totalCount'];
 
-  renderLectureGraphic({
-      femalePct: femalePct
-  });
+    // Update the labels
+    $('#pct-female-label').html((femalePct * 100).toFixed(0) + '%');
+    $('#total-count-label').html(totalCount);
+    $('.alert').addClass('hidden');
+
+    renderLectureGraphic({
+        femalePct: femalePct
+    });
+  } catch(e) {
+    // Not enough data for this department/year combination
+    $('#pct-female-label').html('%');
+    $('#total-count-label').html('');
+    $('.alert').removeClass('hidden');
+    renderLectureGraphic({
+        femalePct: 0
+    });
+  }
 }
 
 var renderLectureGraphic = function(config) {
