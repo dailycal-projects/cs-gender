@@ -6,16 +6,14 @@ layout: default
   <div class="container">
     <div style="padding-top: 40px" class="row">
       <div class="col-lg-6">
-        <h1>What does a hacker look like?</h1>
+        <h1 class="hacker"></h1>
         <br>
         <p style="color: #81d72e;">By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a> and <a href="http://www.dailycal.org/author/cweiner">CHLOEE WEINER</a>
         <br>
-        November 11, 2016</p>
+        November 14, 2016</p>
       </div>
       <div class="col-lg-4 offset-lg-1">
-        <p class="teaser">
-        <br>
-        UC Berkeley's EECS department has the lowest proportion of male graduates of any department on campus. It's put programs in place to close the gap — but who's left out?</p>
+        <p class="teaser">UC Berkeley's EECS department has the lowest proportion of female graduates of any department on campus. It's put programs in place to close the gap — but how far can they go?</p>
       </div>
 
       </div>
@@ -94,7 +92,7 @@ layout: default
       <hr>
       <p class="graphic-title">Percent male computer science graduates</p>
       <div id="line-chart"></div>
-      <p class="caption">Source: Cal Answers</p>
+      <p class="caption">Includes both EECS and L&S Computer Science graduates.<br>Source: Cal Answers</p>
       <hr>
     </div>
   </div>
@@ -166,6 +164,26 @@ layout: default
 </div>
 
 <script type="text/javascript">
+
+$(function(){
+      $(".hacker").typed({
+        strings: ["What does a hacker look like?"],
+        typeSpeed: 50,
+        startDelay: 5,
+        showCursor: false
+      });
+  });
+
+/*$(function(){
+      $(".teaser").typed({
+        strings: ["UC Berkeley's EECS department has the lowest proportion of female graduates of any department on campus. It's put programs in place to close the gap — but how far can they go?"],
+        typeSpeed: 10,
+        startDelay: 5,
+      });
+  });*/
+
+
+
 /*
  * Basic Javascript helpers used in analytics.js and graphics code.
  */

@@ -8,48 +8,79 @@ title: How many women are in your department?
       <h1>How many women are in your department?</h1>
       <p class="byline">By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a>
       <br>
-      November 11, 2016</p>
+      November 14, 2016</p>
       <p>When you look around your class, how likely are you to find someone like you? We created a seating chart for one of the large lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science</a> graduate, or an <a href="#english">English</a> graduate</a>.</p>
       <p><b>Related story:</b> <a href="{{ site.baseurl }}/">What does a hacker look like?</a></p>
     </div>
   </div>
 
   <div class="row graphic-text">
-    <div class="col-md-12">
-        <span id="pct-female-label" class="label"></span>
-        of the
-        <span id="total-count-label" class="label"></span>
-
-        <select id="department-selector" data-size="20" data-width="300px" data-live-search="true" data-style="btn-secondary" class="selector selectpicker"></select>
-
-        &nbsp; graduates in &nbsp;
-
-        <select id="year-selector" data-width="100px" data-style="btn-secondary" class="selector selectpicker">
-        </select>
-
-        &nbsp; were <span class="female">female.</span>
-    </div>
-  </div>
-  <div class="row graphic-text">
     <div class="col-md-4 offset-md-4">
-      <div class="alert alert-danger hidden" role="alert">
+      <div class="alert alert-danger invisible" role="alert">
           Not enough data.
       </div>
     </div>
   </div>
+
+  <div class="row graphic-text">
+    <div class="col-md-12">
+        <span id="pct-female-label" class="label btn btn-secondary "></span>
+        &nbsp; of the &nbsp;
+        <span id="total-count-label" class="label btn"></span>
+        &nbsp;
+        <select id="department-selector" data-dropupAuto="false" data-size="20" data-width="300px" data-live-search="true" data-style="btn-secondary" class="selector selectpicker"></select>
+        &nbsp; graduates in &nbsp;
+        <select id="year-selector" data-dropupAuto="false" data-width="100px" data-style="btn-secondary" class="selector selectpicker">
+        </select>
+        &nbsp; were &nbsp; <span class="btn label female">female.</span>
+    </div>
+  </div>
+  
   <div class="row">
-    <div class="col-md-8 offset-md-2" id="lecture-graphic">
+    <div class="col-md-7" id="lecture-graphic">
       {% include wheeler.svg %}
     </div>
+    <div class="col-md-5">
+      <p style="text-align: center;">Least female in <span class="year-lbl"></span></p>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Department</th>
+            <th class="right">Pct. female graduates</th>
+          </tr>
+        </thead>
+        <tbody id="least-female">
+        </tbody>
+        <tbody>
+          <tr>
+            <th style="text-align: center;" colspan="2">...</th>
+        </tbody>
+        <tbody id="most-female">
+        </tbody>
+      </table>
+      <p style="text-align: center;">Most female in <span class="year-lbl"></span></p>
+    </div>
+  </div>
+  <div class="row">
+    
   </div>
 
   <div class="row footnotes">
     <div class="col-md-8 offset-md-2">
-      <p>We've filled a random selection of the 768 seats on this chart based on the proportion of department graduates who identified as female. We excluded departments with fewer than 30 graduates.</p>
+      <p>We've filled a random selection of the 767 seats on this chart based on the proportion of department graduates who identified as female. We excluded departments with fewer than 20 graduates.</p>
       <p>Data is from <a href="http://calanswers.berkeley.edu/">Cal Answers</a>. The analysis is available <a href="https://github.com/dailycal-projects/cs-gender/blob/master/cs_analysis.ipynb">here</a>.</p>
     </div>
   </div>
 </div>
+
+<script type="text/template" id="table-template">
+  <% _.each(data, function(d) { %>
+  <tr>
+    <td><a href="#<% print(d['slug']) %>"><% print(d['dept']) %></a></td>
+    <td class="right"><% print((d['femalePct']*100).toFixed(0)) %>%</td>
+  </tr>
+  <% }); %>
+</script>
 
 <script type="text/javascript">
 /*
@@ -67,26 +98,40 @@ var classify = function(str) {
 
 // Global vars
 var FEMALE_COLOR = '#8dd3c7';
+var years = {};
 
 // Get the data, format it and render the chart
 d3.csv('{{ site.baseurl }}/csv/data.csv', function(data) {
   departments = {};
-  slugs = {}
+  slugs = {};
 
   data.forEach(function(d) {
     slug = classify(d['dept']);
     year = (parseInt(d['year'].split('-')[0]) + 1).toString();
 
     // Populate a crosswalk for slugs
-    if (year == 2015) {
       slugs[slug] = d['dept'];
-    }
+
+    // Populate the years object
+    years[year] = years[year] || [];
+    years[year].push({
+      'femalePct': d['female_pct'],
+      'dept': d['dept'],
+      'slug': slug,
+    });
 
     departments[slug] = departments[slug] || {};
     departments[slug][year] = {
       'femalePct': d['female_pct'],
       'totalCount': +d['total_count']
     }
+  });
+
+  // Sort the years object
+  _.each(years, function(val, key) {
+    years[key] = _.sortBy(val, function(d) {
+      return +d['femalePct'];
+    });
   });
 
   // Populate department selector
@@ -134,6 +179,14 @@ var render = function() {
 
   // Get the year from the selector
   var year = $('#year-selector').val();
+  $('.year-lbl').html(year);
+
+  // Populate the tables
+  var template = _.template($('#table-template').html());
+  var least_female_html = template({'data': _.first(years[year], 5)});
+  $('#least-female').html(least_female_html);
+  var most_female_html = template({'data': _.last(years[year], 5)});
+  $('#most-female').html(most_female_html);
 
   try {
     var femalePct = departments[slug][year]['femalePct'];
@@ -142,16 +195,16 @@ var render = function() {
     // Update the labels
     $('#pct-female-label').html((femalePct * 100).toFixed(0) + '%');
     $('#total-count-label').html(totalCount);
-    $('.alert').addClass('hidden');
+    $('.alert').addClass('invisible');
 
     renderLectureGraphic({
         femalePct: femalePct
     });
   } catch(e) {
     // Not enough data for this department/year combination
-    $('#pct-female-label').html('%');
+    $('#pct-female-label').html('');
     $('#total-count-label').html('');
-    $('.alert').removeClass('hidden');
+    $('.alert').removeClass('invisible');
     renderLectureGraphic({
         femalePct: 0
     });

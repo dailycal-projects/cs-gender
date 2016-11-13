@@ -1,3 +1,85 @@
+.invisible {
+  opacity: 0;
+}
+
+.alert {
+  margin-bottom: 0;
+}
+
+.graphic-top {
+  margin-top: 15px;
+  text-align: center;
+
+  h1 {
+    font-size: 3rem;
+
+    @media screen and (max-width: 34em) {
+      font-size: 2rem;
+    }
+  }
+
+  .byline {
+    font-size: 0.9rem;
+  }
+}
+
+.graphic-container .row {
+  margin: 20px auto;
+}
+
+.graphic-text {
+  text-align: center;
+  font-size: 20px;
+
+  .label {
+    background-color: #e6e6e6;
+    border: none;
+    cursor: default;
+  }
+
+  #pct-female-label {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 48px;
+    height: 80px;
+    width: 140px;
+  }
+
+  #total-count-label {
+    display: inline-block;
+    width: 80px;
+    height: 40px;
+    text-align: center;
+  }
+
+  .female {
+    background: #8dd3c7;
+    border: none;
+  }
+
+  #lecture-graphic {
+    margin-top: 15px;
+  }
+
+  #seats polygon {
+    fill: #fff;
+  }
+
+  @include media-breakpoint-down(sm) {
+    .bootstrap-select {
+      margin: 10px auto;
+    }
+  }
+}
+
+.table {
+  font-size: $font-size-sm;
+}
+
+.table .right {
+  text-align: right;
+}
+
 /*
 * Standard graphic styles
 */

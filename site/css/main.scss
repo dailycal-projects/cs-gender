@@ -11,68 +11,6 @@
   "bootstrap-select"
 ;
 
-.graphic-top {
-  margin-top: 15px;
-  text-align: center;
-
-  h1 {
-    font-size: 3rem;
-
-    @media screen and (max-width: 34em) {
-      font-size: 2rem;
-    }
-  }
-
-  .byline {
-    font-size: 0.9rem;
-  }
-}
-
-.graphic-container .row {
-  margin: 20px auto;
-}
-
-.graphic-text {
-  text-align: center;
-  font-size: 20px;
-
-  #pct-female-label {
-    position: relative;
-    top: 10px;
-    display: inline-block;
-    width: 120px;
-    font-weight: 600;
-    font-size: 48px;
-  }
-
-  #total-count-label {
-    display: inline-block;
-    width: 50px;
-    text-align: left;
-  }
-
-  span.female {
-    background: #8dd3c7;
-    padding: 8px 12px;
-    border-radius: 4px;
-  }
-
-  #lecture-graphic {
-    margin-top: 15px;
-  }
-
-  #seats polygon {
-    fill: #fff;
-  }
-
-  @include media-breakpoint-down(sm) {
-    .bootstrap-select {
-      margin: 10px auto;
-    }
-  }
-
-}
-
 .footnotes p {
   text-align: center;
   font-size: 0.8rem;
@@ -100,23 +38,27 @@
       }
     }
 
-    p.teaser {
-      color: #e6db74;
-    }
-
-    a {
-      color: #45ffff;
-    }
-
     p {
       font-family: 'Cutive Mono', sans-serif;
-      font-size: $font-size-lg;
+      font-size: 1.5rem;
+
+      @include media-breakpoint-down(md) {
+        font-size: 1.25rem;
+      }
 
       @include media-breakpoint-down(sm) {
         font-size: 1rem;
       }
     }
 
+    p.teaser {
+      color: #e6db74;
+      margin-top: 10px;
+    }
+
+    a {
+      color: #45ffff;
+    }
   }
 
 .container {
