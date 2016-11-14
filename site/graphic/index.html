@@ -1,15 +1,15 @@
 ---
 layout: default
-title: How many women are in your department?
+title: Seating Arrangements
 ---
 <div class="container graphic-container">
   <div class="row graphic-top">
     <div class="col-md-8 offset-md-2">
-      <h1>How many women are in your department?</h1>
-      <p class="byline">By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a>
-      <br>
-      November 14, 2016</p>
-      <p>When you look around your class, how likely are you to find someone like you? We created a seating chart for one of the large lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science</a> graduate, or an <a href="#english">English</a> graduate</a>.</p>
+      <h1>Seating Arrangements</h1>
+      <p class="lead">What's the gender breakdown of your department?</p>
+      <p class="byline">By <a href="http://www.dailycal.org/author/schinoy">SAHIL CHINOY</a> &middot; November 14, 2016</p>
+
+      <p>When you look around your class, how likely are you to find someone like you? We created a seating chart for one of the large lecture halls on campus, Wheeler Auditorium, and imagined what it might look like if everyone sitting down were, say, an <a href="#electrical-eng-computer-sci">Electrical Engineering and Computer Science</a> graduate or an <a href="#english">English</a> graduate</a>.</p>
       <p><b>Related story:</b> <a href="{{ site.baseurl }}/">What does a hacker look like?</a></p>
     </div>
   </div>
@@ -28,9 +28,9 @@ title: How many women are in your department?
         &nbsp; of the &nbsp;
         <span id="total-count-label" class="label btn"></span>
         &nbsp;
-        <select id="department-selector" data-dropupAuto="false" data-size="20" data-width="300px" data-live-search="true" data-style="btn-secondary" class="selector selectpicker"></select>
+        <select id="department-selector" class="selector"></select>
         &nbsp; graduates in &nbsp;
-        <select id="year-selector" data-dropupAuto="false" data-width="100px" data-style="btn-secondary" class="selector selectpicker">
+        <select id="year-selector" class="selector">
         </select>
         &nbsp; were &nbsp; <span class="btn label female">female.</span>
     </div>
@@ -98,12 +98,12 @@ var classify = function(str) {
 
 // Global vars
 var FEMALE_COLOR = '#8dd3c7';
-var years = {};
 
 // Get the data, format it and render the chart
 d3.csv('{{ site.baseurl }}/csv/data.csv', function(data) {
   departments = {};
   slugs = {};
+  years = {};
 
   data.forEach(function(d) {
     slug = classify(d['dept']);
@@ -136,17 +136,32 @@ d3.csv('{{ site.baseurl }}/csv/data.csv', function(data) {
 
   // Populate department selector
   html = '';
-  _.each(slugs, function(val, key) {
-    html += '<option value="'+ key + '">' + val + '</option>';
+  dept_list = _.sortBy(years[2016], function(d) { return d['dept'] })
+  _.each(dept_list, function(d) {
+    html += '<option value="'+ d['slug'] + '">' + d['dept'] + '</option>';
   });
-  $('#department-selector').html(html);
+  $('#department-selector')
+    .html(html)
+    .selectpicker({
+      style: 'btn-secondary',
+      size: 20,
+      width: '300px',
+      dropupAuto: false,
+      liveSearch: true,
+    });
 
   // Populate year selector
   html = '';
   for (i = 2016; i >= 1985; i--) {
     html += '<option>' + i.toString() + '</option>';
   }
-  $('#year-selector').html(html);
+  $('#year-selector')
+    .html(html)
+    .selectpicker({
+      style: 'btn-secondary',
+      width: '100px',
+      dropupAuto: false,
+    });
 
   // Render the chart
   if (location.hash) {

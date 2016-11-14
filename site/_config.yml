@@ -8,7 +8,7 @@
 # Site settings
 title: What does a hacker look like? | The Daily Californian
 email: projects@dailycal.org
-description: UC Berkeley's EECS department has the lowest proportion of female graduates of any department on campus. It's put programs in place to close the gap — but how far can they go?
+description: UC Berkeley's EECS department has the lowest proportion of female graduates of any department on campus. It has a strategy to close the gap — but how far can these programs go?
   
 baseurl: "/cs-gender" # the subpath of your site, e.g. /blog
 url: "http://projects.dailycal.org/" # the base hostname & protocol for your site

@@ -41,6 +41,7 @@
     p {
       font-family: 'Cutive Mono', sans-serif;
       font-size: 1.5rem;
+      color: #e6db74;
 
       @include media-breakpoint-down(md) {
         font-size: 1.25rem;
@@ -52,8 +53,7 @@
     }
 
     p.teaser {
-      color: #e6db74;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
     a {
@@ -114,6 +114,7 @@
     font-family: sans-serif;
     font-size: $font-size-xs;
     color: $gray-light;
+    margin-top: 10px;
   }
 }
 
