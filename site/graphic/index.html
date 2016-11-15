@@ -190,7 +190,7 @@ var render = function() {
   // Get the department name from the hash
   var slug = location.hash.slice(1);
   // Update the selector
-  $('#department-selector').val(slug);
+  $('#department-selector').selectpicker('val', location.hash.slice(1));
 
   // Get the year from the selector
   var year = $('#year-selector').val();
